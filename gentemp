@@ -1,0 +1,31 @@
+#!/bin/bash
+set -e
+#
+# Author: Anthony Cox
+# Date: August 14th, 2023
+# Purpose: Copies a file or directory from a template located in '/usr/local/share/gentemp/templates' to the given destination
+# 
+# Exit Codes:
+# 1: missing template name, -h, or --help arugment 
+
+#1. validation of cmdline parameters
+if [[ -z $1 ]]; then
+    >2& echo 'fatal: missing required argument: template name or help (-h, --help)'
+    exit 1
+fi
+
+if [[ "$1" == '-h' ]] || [[ "$1" == '--help' ]]; then
+    echo 'This program generates a file or directory from a template located in /usr/local/share/gentemp/templates to the specified location'
+    echo 'Arugments:'
+    echo '[0th Argument, required]: the name of the template to copy'
+    echo '[1st Argument, optional]: the location to copy it to. default location is the current directory'
+    exit 0
+fi
+
+# 2. Declarations of resources
+resource_dir=/usr/local/share
+template_dir="$resource_dir/gentemp/templates"
+template="$1"
+dest=${2:-"$1"}
+
+cp -rn "$template_dir/$template" "$dest"
